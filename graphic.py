@@ -23,6 +23,7 @@ class AppForm(QMainWindow):
         self.create_main_frame()
         self.on_draw()
         self.create_menu()
+        self.line()
      
     def create_menu(self):        
         self.file_menu = self.menuBar().addMenu("&File")
@@ -64,9 +65,9 @@ class AppForm(QMainWindow):
         # configuration tool in the navigation toolbar wouldn't
         # work.   
         self.axes = self.fig.add_subplot(1,2,2,projection='3d')
-        self.axes.set_xlim3d(-1000,1000)
-        self.axes.set_ylim3d(-1000,1000)
-        self.axes.set_zlim3d(-1000,1000)
+        self.axes.set_xlim3d(-1100,1100)
+        self.axes.set_ylim3d(-1100,1100)
+        self.axes.set_zlim3d(-1100,1100)
         xmajorLocator=MultipleLocator(250)
         ymajorLocator=MultipleLocator(250)
         zmajorLocator=MultipleLocator(250)
@@ -89,11 +90,11 @@ class AppForm(QMainWindow):
         self.cb4.setChecked(True)
         self.cb5.setChecked(True)
         
-        self.cb1.stateChanged.connect(self.colorclickboxes)
-        self.cb2.stateChanged.connect(self.colorclickboxes)
-        self.cb3.stateChanged.connect(self.colorclickboxes)
-        self.cb4.stateChanged.connect(self.colorclickboxes)
-        self.cb5.stateChanged.connect(self.colorclickboxes)
+        self.cb1.stateChanged.connect(self.on_draw)
+        self.cb2.stateChanged.connect(self.on_draw)
+        self.cb3.stateChanged.connect(self.on_draw)
+        self.cb4.stateChanged.connect(self.on_draw)
+        self.cb5.stateChanged.connect(self.on_draw)
         
         
        # slider_labelx = QLabel('X:')
@@ -148,15 +149,15 @@ class AppForm(QMainWindow):
             print(b)
             self.faces = Poly3DCollection(self.edges)
             #,linewidths=1,edgecolors='k'
-            if b==400:#and self.cb1.isChecked():
+            if b==400 and self.cb1.isChecked():
                 self.faces.set_facecolor((1,0,0,0.5))
-            elif b==800:#and self.cb2.isChecked():
+            elif b==800 and self.cb2.isChecked():
                 self.faces.set_facecolor((1,1,0,0.5))
-            elif b==1200:#and self.cb3.isChecked():
+            elif b==1200 and self.cb3.isChecked():
                 self.faces.set_facecolor((0,0.5,0,0.5))
-            elif b==1600:#and self.cb4.isChecked():
+            elif b==1600 and self.cb4.isChecked():
                 self.faces.set_facecolor((0,0,1,0.5))
-            elif b==2000:#and self.cb5.isChecked():
+            elif b==2000 and self.cb5.isChecked():
                 self.faces.set_facecolor((0.5,0,1,0.5))
 
             self.axes.add_collection3d(self.faces)
@@ -173,32 +174,32 @@ class AppForm(QMainWindow):
         ysec=self.textboxy.text()
         zsec=self.textboxz.text()
         self.plot(xsec,ysec,zsec)
-        
-        
+             
     def plot(self,a,b,c):
-       # ymin,ymax=self.axes.get_ylim()
-       # ymid=0.5*(ymin+ymax)
-       # self.line=self.axes.axhline(ymid,color='r')
         aa=float(a)
         bb=float(b)
         cc=float(c)
-        self.line1 = self.axes.plot([aa,aa], [1000,-1000], [1000,1000], '-', c='k',linewidth=3)
-        self.line2 = self.axes.plot([aa,aa], [-1000,-1000], [1000,-1000], '-', c='k',linewidth=3)
-        self.line3 = self.axes.plot([aa,aa], [1000,1000], [1000,-1000], '-', c='k',linewidth=3)
-        self.line4 = self.axes.plot([aa,aa], [-1000,1000], [-1000,-1000], '-', c='k',linewidth=3)
+        self.line1 = self.axes.plot([aa,aa], [1010,-1010], [1010,1010], '-', c='k',linewidth=3)
+        self.line2 = self.axes.plot([aa,aa], [-1010,-1010], [1010,-1010], '-', c='k',linewidth=3)
+        self.line3 = self.axes.plot([aa,aa], [1010,1010], [1010,-1010], '-', c='k',linewidth=3)
+        self.line4 = self.axes.plot([aa,aa], [-1010,1010], [-1010,-1010], '-', c='k',linewidth=3)
         
-        self.line5 = self.axes.plot([1000,-1000], [bb,bb], [1000,1000], '-', c='k',linewidth=3)
-        self.line6 = self.axes.plot([-1000,-1000], [bb,bb], [1000,-1000], '-', c='k',linewidth=3)
-        self.line7 = self.axes.plot([1000,1000], [bb,bb], [1000,-1000], '-', c='k',linewidth=3)
-        self.line8 = self.axes.plot([-1000,1000], [bb,bb], [-1000,-1000], '-', c='k',linewidth=3)
+        self.line5 = self.axes.plot([1010,-1010], [bb,bb], [1010,1010], '-', c='k',linewidth=3)
+        self.line6 = self.axes.plot([-1010,-1010], [bb,bb], [1010,-1010], '-', c='k',linewidth=3)
+        self.line7 = self.axes.plot([1010,1010], [bb,bb], [1010,-1010], '-', c='k',linewidth=3)
+        self.line8 = self.axes.plot([-1010,1010], [bb,bb], [-1010,-1010], '-', c='k',linewidth=3)
         
-        self.line9 = self.axes.plot([1000,1000], [1000,-1000], [cc,cc], '-', c='k',linewidth=3)
-        self.line10 = self.axes.plot([1000,-1000], [-1000,-1000], [cc,cc], '-', c='k',linewidth=3)
-        self.line11 = self.axes.plot([-1000,1000], [1000,1000], [cc,cc], '-', c='k',linewidth=3)
-        self.line12 = self.axes.plot([-1000,-1000], [-1000,1000], [cc,cc], '-', c='k',linewidth=3)
-               
+        self.line9 = self.axes.plot([1010,1010], [1010,-1010], [cc,cc], '-', c='k',linewidth=3)
+        self.line10 = self.axes.plot([1010,-1010], [-1010,-1010], [cc,cc], '-', c='k',linewidth=3)
+        self.line11 = self.axes.plot([-1010,1010], [1010,1010], [cc,cc], '-', c='k',linewidth=3)
+        self.line12 = self.axes.plot([-1010,-1010], [-1010,1010], [cc,cc], '-', c='k',linewidth=3)
+        
         self.canvas.draw()
     
+    def line(self):
+        ymin,ymax=self.axes.get_ylim()
+        ymid=0.5*(ymin+ymax)
+        self.line=self.axes.axhline(ymid,color='r')
         self.fig.canvas.mpl_connect('button_press_event',self.onpress)
         self.fig.canvas.mpl_connect('button_release_event',self.onrelease)
         self.fig.canvas.mpl_connect('motion_notify_event',self.onmove)
