@@ -1,0 +1,50 @@
+ 
+ *************************************************************** 
+          Parameters Set For This Run of c2f.f
+
+ c2f VERSIO: 2004.0909
+
+ Current parameter specification file: FDtomo.spec                             
+
+ Iteration counter:                   1
+
+ Cartesian X origin (x0):    120.9000000000000057
+ Cartesian Y origin (y0):    23.8000000000000007
+ Cartesian Z origin (z0):    -4.0000000000000000
+ Fine grid spacing: 2.0000000000000000
+
+ Number of X coarse grid nodes: 21
+ X coarse grid node spacing: 
+2   2   2   2   2   2   2   2   2   2   
+2   2   2   2   2   2   2   2   2   2   
+
+
+ Number of Y coarse grid nodes: 21
+ Y coarse grid node spacing: 
+2   2   2   2   2   2   2   2   2   2   
+2   2   2   2   2   2   2   2   2   2   
+
+
+ Number of Z coarse grid nodes: 22
+ Z coarse grid node spacing: 
+2   1   1   1   1   1   1   1   1   1   
+1   1   1   2   2   2   2   2   2   2   
+2   
+
+ Number of X fine grid nodes: 41
+ Number of Y fine grid nodes: 41
+ Number of Z fine grid nodes: 31
+
+ Total Number of fine grid nodes: 52111
+ Total Number of coarse grid nodes: 9702
+
+ Input file attachments:
+
+ Current Wavespeed model file: TW_m30_wL.mod                           
+
+ Output file attachments:
+
+ Grid output file:             c2f.gridout                             
+ P&S fine model:               tempvel                                 
+ P only fine model (*.pvel):   tempvel                                 
+ S only fine model (*.svel):   tempvel                                 
