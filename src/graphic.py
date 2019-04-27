@@ -76,14 +76,17 @@ class AppForm(QMainWindow):
         self.axx = self.fig.add_subplot(243)
         self.axx.set_xlim(0,41)
         self.axx.set_ylim(0,62)
+        self.axx.grid(color='k', linestyle='--', linewidth=0.5)
         #self.axx.set_aspect('equal')
         self.axy = self.fig.add_subplot(244)
         self.axy.set_xlim(0,41)
         self.axy.set_ylim(0,62)
+        self.axy.grid(color='k', linestyle='--', linewidth=0.5)
         #self.axy.set_aspect('equal')
         self.axz = self.fig.add_subplot(247)
         self.axz.set_xlim(0,41)
         self.axz.set_ylim(0,41)
+        self.axz.grid(color='k', linestyle='--', linewidth=0.5)
        # self.axz.set_aspect('equal')
         self.logo=self.fig.add_subplot(248)
         self.logo.set_aspect('equal')
@@ -95,7 +98,7 @@ class AppForm(QMainWindow):
         
         slider_labelcolor = QLabel('顯示數值：')
         self.comboboxcolor = QComboBox(self)
-        colors=['我全都要','vsave<3','3<vsave<4','4<vsave<5','4<vsave<5','5<vsave<6','6<vsave<7','8<vsave']
+        colors=['我全都要','vsave<3','3<vsave<4','4<vsave<5','5<vsave<6','6<vsave<7','8<vsave']
         self.comboboxcolor.addItems(colors)
         self.comboboxcolor.setMaxVisibleItems(5) 
         self.comboboxcolor.activated.connect(self.onecolor)
@@ -152,8 +155,8 @@ class AppForm(QMainWindow):
                 line = file.readline()
         #print(self.test)
         
-        self.data= np.zeros((41, 41, 62), dtype=np.float)
-        self.color= np.zeros((41, 41, 62), dtype=np.int)
+        self.data= np.zeros((41,41,62), dtype=np.float)
+        self.color= np.zeros((41,41,62), dtype=np.int)
         i=0
         j=0
         k=0
@@ -187,103 +190,6 @@ class AppForm(QMainWindow):
         print(self.test[104221])
         self.on_draw()
     
-    def drawx(self,a):
-        b=0
-        while b<41:
-            c=0
-            while c<62:
-                self.edges = [
-                        [(0+a,0+b,0+c),(1+a,0+b,0+c),(1+a,1+b,0+c),(0+a,1+b,0+c)],
-                        [(1+a,0+b,0+c),(1+a,1+b,0+c),(1+a,1+b,1+c),(1+a,0+b,1+c)],
-                        [(0+a,1+b,0+c),(0+a,1+b,1+c),(1+a,1+b,1+c),(1+a,1+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,1+b,0+c),(0+a,0+b,0+c),(0+a,0+b,1+c)],
-                        [(0+a,0+b,0+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,0+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,1+b,1+c)]]
-                self.faces = Poly3DCollection(self.edges,zorder=1)
-                        
-                if self.color[a,b,c]==0:
-                    self.faces.set_facecolor((1,0,0.1,1))
-                elif self.color[a,b,c]==1:
-                    self.faces.set_facecolor((1,0.5,0,1))
-                elif self.color[a,b,c]==2:
-                    self.faces.set_facecolor((1,1,0,1))
-                elif self.color[a,b,c]==3:
-                    self.faces.set_facecolor((0.5,1,0,1))
-                elif self.color[a,b,c]==4:
-                    self.faces.set_facecolor((0,1,1,1))
-                elif self.color[a,b,c]==5:
-                    self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,b,c]==7:
-                    self.faces.set_facecolor((0.5,0.2,0.9,1))
-                self.axes.add_collection3d(self.faces)
-                c=c+1
-            b=b+1
-        self.canvas.draw()
-    def drawy(self,b):
-        a=0
-        while a<41:
-            c=0
-            while c<62:
-                self.edges = [
-                        [(0+a,0+b,0+c),(1+a,0+b,0+c),(1+a,1+b,0+c),(0+a,1+b,0+c)],
-                        [(1+a,0+b,0+c),(1+a,1+b,0+c),(1+a,1+b,1+c),(1+a,0+b,1+c)],
-                        [(0+a,1+b,0+c),(0+a,1+b,1+c),(1+a,1+b,1+c),(1+a,1+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,1+b,0+c),(0+a,0+b,0+c),(0+a,0+b,1+c)],
-                        [(0+a,0+b,0+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,0+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,1+b,1+c)]]
-                self.faces = Poly3DCollection(self.edges,zorder=1)
-                
-                if self.color[a,b,c]==0:
-                    self.faces.set_facecolor((1,0,0.1,1))
-                elif self.color[a,b,c]==1:
-                    self.faces.set_facecolor((1,0.5,0,1))
-                elif self.color[a,b,c]==2:
-                    self.faces.set_facecolor((1,1,0,1))
-                elif self.color[a,b,c]==3:
-                    self.faces.set_facecolor((0.5,1,0,1))
-                elif self.color[a,b,c]==4:
-                    self.faces.set_facecolor((0,1,1,1))
-                elif self.color[a,b,c]==5:
-                    self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,b,c]==7:
-                    self.faces.set_facecolor((0.5,0.2,0.9,1))
-                self.axes.add_collection3d(self.faces)
-                c=c+1
-            a=a+1
-        self.canvas.draw()
-    def drawz(self,c):
-        a=0
-        while a<41:
-            b=0
-            while b<41:
-                self.edges = [
-                        [(0+a,0+b,0+c),(1+a,0+b,0+c),(1+a,1+b,0+c),(0+a,1+b,0+c)],
-                        [(1+a,0+b,0+c),(1+a,1+b,0+c),(1+a,1+b,1+c),(1+a,0+b,1+c)],
-                        [(0+a,1+b,0+c),(0+a,1+b,1+c),(1+a,1+b,1+c),(1+a,1+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,1+b,0+c),(0+a,0+b,0+c),(0+a,0+b,1+c)],
-                        [(0+a,0+b,0+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,0+b,0+c)],
-                        [(0+a,1+b,1+c),(0+a,0+b,1+c),(1+a,0+b,1+c),(1+a,1+b,1+c)]]
-                self.faces = Poly3DCollection(self.edges,zorder=1)
-                
-                if self.color[a,b,c]==0:
-                    self.faces.set_facecolor((1,0,0.1,1))
-                elif self.color[a,b,c]==1:
-                    self.faces.set_facecolor((1,0.5,0,1))
-                elif self.color[a,b,c]==2:
-                    self.faces.set_facecolor((1,1,0,1))
-                elif self.color[a,b,c]==3:
-                    self.faces.set_facecolor((0.5,1,0,1))
-                elif self.color[a,b,c]==4:
-                    self.faces.set_facecolor((0,1,1,1))
-                elif self.color[a,b,c]==5:
-                    self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,b,c]==7:
-                    self.faces.set_facecolor((0.5,0.2,0.9,1))
-                self.axes.add_collection3d(self.faces)
-                b=b+1
-            a=a+1
-        self.canvas.draw()
-
     def on_draw(self):
         b=0
         while b<41:
@@ -309,7 +215,7 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[0,b,c]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[0,b,c]==7:
+                elif self.color[0,b,c]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 c=c+1
@@ -339,7 +245,7 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[40,b,c]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[40,b,c]==7:
+                elif self.color[40,b,c]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 c=c+1
@@ -369,7 +275,7 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[a,40,c]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,40,c]==7:
+                elif self.color[a,40,c]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 c=c+1
@@ -399,7 +305,7 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[a,0,c]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,0,c]==7:
+                elif self.color[a,0,c]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 c=c+1
@@ -430,7 +336,7 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[a,b,0]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,b,0]==7:
+                elif self.color[a,b,0]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 b=b+1
@@ -448,7 +354,6 @@ class AppForm(QMainWindow):
                         [(0+a,0+b,61),(0+a,0+b,62),(1+a,0+b,62),(1+a,0+b,61)],
                         [(0+a,1+b,62),(0+a,0+b,62),(1+a,0+b,62),(1+a,1+b,62)]]
                 self.faces = Poly3DCollection(self.edges,zorder=1)
-                
                 if self.color[a,b,61]==0:
                     self.faces.set_facecolor((1,0,0.1,1))
                 elif self.color[a,b,61]==1:
@@ -461,28 +366,101 @@ class AppForm(QMainWindow):
                     self.faces.set_facecolor((0,1,1,1))
                 elif self.color[a,b,61]==5:
                     self.faces.set_facecolor((0,0,1,1))
-                elif self.color[a,b,61]==7:
+                elif self.color[a,b,61]==6:
                     self.faces.set_facecolor((0.5,0.2,0.9,1))
                 self.axes.add_collection3d(self.faces)
                 b=b+1
             a=a+1
         self.canvas.draw()
-      
-     
+        
+        
+    def coloronly(self,index,r,b,g,a):
+        self.axes.cla()
+        self.axes.set_xlim3d(-1,42)
+        self.axes.set_ylim3d(-1,42)
+        self.axes.set_zlim3d(-1,63)
+        xmajorLocator=MultipleLocator(5)
+        ymajorLocator=MultipleLocator(5)
+        zmajorLocator=MultipleLocator(5)
+        self.axes.xaxis.set_major_locator(xmajorLocator)
+        self.axes.yaxis.set_major_locator(ymajorLocator)
+        self.axes.zaxis.set_major_locator(zmajorLocator)
+        i=0
+        while i<41:
+            j=0
+            while j<41:
+                k=0
+                while k<62: 
+                    if self.color[i,j,k]==index:
+                        print(self.color[i,j,k],index)
+                        self.edges = [
+                                [(0+i,0+j,0+k),(1+i,0+j,0+k),(1+i,1+j,0+k),(0+i,1+j,0+k)],
+                                [(1+i,0+j,0+k),(1+i,1+j,0+k),(1+i,1+j,1+k),(1+i,0+j,1+k)],
+                                [(0+i,1+j,0+k),(0+i,1+j,1+k),(1+i,1+j,1+k),(1+i,1+j,0+k)],
+                                [(0+i,1+j,1+k),(0+i,1+j,0+k),(0+i,0+j,0+k),(0+i,0+j,1+k)],
+                                [(0+i,0+j,0+k),(0+i,0+j,1+k),(1+i,0+j,1+k),(1+i,0+j,0+k)],
+                                [(0+i,1+j,1+k),(0+i,0+j,1+k),(1+i,0+j,1+k),(1+i,1+j,1+k)]]
+                        self.faces = Poly3DCollection(self.edges,color='k',linewidth=0.5,zorder=1)
+                        self.faces.set_facecolor((r,b,g,a))
+                        self.axes.add_collection3d(self.faces)
+                    k=k+1
+                j=j+1
+            i=i+1
+        print('finish',r,b,g,a)
+        self.canvas.draw()
     def onecolor(self):
+        r=0
+        b=0
+        g=0
+        a=0
         index=self.comboboxcolor.currentIndex()
-        self.fig.cla()
+        print(index*index)
         if index==0:
             self.on_draw()
-        #if index==1:
-            
+        else:
+            if index==1:
+                r=1
+                b=0
+                g=0.1
+                a=1
+            elif index==2:
+                r=1
+                b=0.5
+                g=0
+                a=1
+            elif index==3:
+                r=1
+                b=1
+                g=0
+                a=1
+            elif index==4:
+                r=0.5
+                b=1
+                g=0
+                a=1
+            elif index==5:
+                r=0
+                b=1
+                g=1
+                a=1
+            elif index==6:
+                r=0
+                b=0
+                g=1
+                a=1
+            elif index==7:
+                r=0.5
+                b=0.2
+                g=0.9
+                a=1
+            self.coloronly(index-1,r,b,g,a)            
 
     
     def drawsection(self):
         xsec=self.textboxx.text()
         ysec=self.textboxy.text()
         zsec=self.textboxz.text()
-        #self.plot(xsec,ysec,zsec)
+        self.plot(xsec,ysec,zsec)
         self.showsection(xsec,ysec,zsec)
     
     def plot(self,a,b,c):
@@ -490,24 +468,23 @@ class AppForm(QMainWindow):
         aa=float(a)
         bb=float(b)
         cc=float(c)
-
-        self.line1 = self.axes.plot([aa,aa], [45,-1], [63,63], '-', c='k',linewidth=3,zorder=20)
-        self.line2 = self.axes.plot([aa,aa], [-1,-1], [63,-1], '-', c='k',linewidth=3,zorder=20)
-        self.line3 = self.axes.plot([aa,aa], [45,45], [63,-1], '-', c='k',linewidth=3,zorder=20)
-        self.line4 = self.axes.plot([aa,aa], [-1,45], [-1,-1], '-', c='k',linewidth=3,zorder=20)
         
-        self.line5 = self.axes.plot([42,-1], [bb,bb], [63,63], '-', c='k',linewidth=3,zorder=20)
-        self.line6 = self.axes.plot([-1,-1], [bb,bb], [63,-1], '-', c='k',linewidth=3,zorder=20)
-        self.line7 = self.axes.plot([42,42], [bb,bb], [63,-1], '-', c='k',linewidth=3,zorder=20)
-        self.line8 = self.axes.plot([-1,42], [bb,bb], [-1,-1], '-', c='k',linewidth=3,zorder=20)
+        line1 = self.axes.plot([aa,aa], [45,-1], [63,63], '-', c='k',linewidth=3,zorder=20)
+        line2 = self.axes.plot([aa,aa], [-1,-1], [63,-1], '-', c='k',linewidth=3,zorder=20)
+        line3 = self.axes.plot([aa,aa], [45,45], [63,-1], '-', c='k',linewidth=3,zorder=20)
+        line4 = self.axes.plot([aa,aa], [-1,45], [-1,-1], '-', c='k',linewidth=3,zorder=20)
         
-        self.line9 = self.axes.plot([42,42], [42,-1], [cc,cc], '-', c='k',linewidth=3,zorder=20)
-        self.line10 = self.axes.plot([42,-1], [-1,-1], [cc,cc], '-', c='k',linewidth=3,zorder=20)
-        self.line11 = self.axes.plot([-1,42], [42,42], [cc,cc], '-', c='k',linewidth=3,zorder=20)
-        self.line12 = self.axes.plot([-1,-1], [-1,42], [cc,cc], '-', c='k',linewidth=3,zorder=20)
+        line5 = self.axes.plot([42,-1], [bb,bb], [63,63], '-', c='k',linewidth=3,zorder=20)
+        line6 = self.axes.plot([-1,-1], [bb,bb], [63,-1], '-', c='k',linewidth=3,zorder=20)
+        line7 = self.axes.plot([42,42], [bb,bb], [63,-1], '-', c='k',linewidth=3,zorder=20)
+        line8 = self.axes.plot([-1,42], [bb,bb], [-1,-1], '-', c='k',linewidth=3,zorder=20)
+        
+        line9 = self.axes.plot([42,42], [42,-1], [cc,cc], '-', c='k',linewidth=3,zorder=20)
+        line10 = self.axes.plot([42,-1], [-1,-1], [cc,cc], '-', c='k',linewidth=3,zorder=20)
+        line11 = self.axes.plot([-1,42], [42,42], [cc,cc], '-', c='k',linewidth=3,zorder=20)
+        line12 = self.axes.plot([-1,-1], [-1,42], [cc,cc], '-', c='k',linewidth=3,zorder=20)
         
         self.canvas.draw()
-        #self.colorclickboxes()
         
     def showsection(self,a,b,c):
         #self.axx.cla()
@@ -539,7 +516,6 @@ class AppForm(QMainWindow):
                     rectangle = mpatches.Rectangle((0+j,0+k),1,1,color=(0.5,0.2,0.9,1))
                 print(self.data[aa,j,k])
                 self.axx.add_patch(rectangle)
-                self.axx.grid()
                 k=k+1
             j=j+1
         self.canvas.draw()
@@ -587,7 +563,7 @@ class AppForm(QMainWindow):
                 elif self.data[i,j,cc]>7 and self.data[i,j,cc]<8:
                     rectangle = mpatches.Rectangle((0+i,0+j),1,1,color=(0,0,1,1))
                 elif self.data[i,j,cc]>8:
-                    rectangle = mpatches.Rectangle((0+i,0+j),1,1,color=(0.5,0.2,0.9,1))
+                    rectangle = mpatches.Rectangle((0+i,0+j),1,1,color=(0.5,0.2,0.9,1),)
                 print(self.data[i,j,cc])
                 self.axz.add_patch(rectangle)
                 j=j+1
@@ -602,4 +578,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
