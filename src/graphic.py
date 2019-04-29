@@ -31,25 +31,35 @@ class AppForm(QMainWindow):
         self.setWindowTitle('哈囉')
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.create_main_frame()
-        #self.on_draw()
         self.create_menu()
         
-     
     def create_menu(self):   
-        self.statusBar()
-        self.setFocus()
-        
-        exit = QAction(QIcon('icons/Blue_Flower.ico'), 'Open', self)
-        exit.setShortcut('Ctrl+O')
-        exit.setStatusTip('Open new file')
-        
-        exit.triggered.connect(self.openfile)
+        #self.statusBar()
+        #self.setFocus()
+        openfile = QAction(QIcon('icons/Blue_Flower.ico'), 'Open', self)
+        openfile.setShortcut('Ctrl+O')
+        openfile.setStatusTip('Open new file')
+        openfile.triggered.connect(self.openfile)
+        quitui = QAction(QIcon('icons/Blue_Flower.ico'), 'Quit', self)
+        quitui.setShortcut('Ctrl+Q')
+        quitui.setStatusTip('Quit')
+        quitui.triggered.connect(self.close)
+        saveplot = QAction(QIcon('icons/Blue_Flower.ico'), 'Save Plot', self)
+        saveplot.setShortcut('Ctrl+S')
+        saveplot.setStatusTip('Save Plot')
+        about = QAction(QIcon('icons/Blue_Flower.ico'), 'About', self)
+        about.setShortcut('Ctrl+A')
+        about.setStatusTip('About')
+        about.triggered.connect(self.on_about)
         
         menubar = self.menuBar()
         file = menubar.addMenu('&File')
-        file.addAction(exit)
-    
-    
+        file.addAction(openfile)
+        file.addAction(saveplot)
+        file.addAction(quitui)
+        helpabout = menubar.addMenu('&Help')
+        helpabout.addAction(about)
+        
     def create_main_frame(self):
         self.main_frame = QWidget()
         self.dpi = 100
@@ -116,16 +126,18 @@ class AppForm(QMainWindow):
         
         textboxx_label = QLabel('X:')
         self.textboxx = QLineEdit(self)
+        self.textboxx.setText('0')
         textboxy_label = QLabel('Y:')
         self.textboxy = QLineEdit(self)
+        self.textboxy.setText('0')
         textboxz_label = QLabel('Z:')
         self.textboxz = QLineEdit(self)
+        self.textboxz.setText('0')
         
         self.drawbutton=QPushButton()
         self.drawbutton.setText('DRAW')
         self.drawbutton.clicked.connect(self.drawsection)
-        
-        
+              
         hbox = QHBoxLayout()
         
         for w in [  slider_labelcolor,self.comboboxcolor,
@@ -141,6 +153,10 @@ class AppForm(QMainWindow):
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)
     
+    def on_about(self):
+        msg = "晚安！"
+        QMessageBox.about(self, "教你怎麼用喔！", msg.strip())
+    
     def openfile(self):
         filename,  _ = QFileDialog.getOpenFileName(self, 'Open file', './')
         file=open(filename)
@@ -153,7 +169,6 @@ class AppForm(QMainWindow):
             else:
                 self.test.append(fline)
                 line = file.readline()
-        #print(self.test)
         
         self.data= np.zeros((41,41,62), dtype=np.float)
         self.color= np.zeros((41,41,62), dtype=np.int)
@@ -373,7 +388,6 @@ class AppForm(QMainWindow):
             a=a+1
         self.canvas.draw()
         
-        
     def coloronly(self,index,r,b,g,a):
         self.axes.cla()
         self.axes.set_xlim3d(-1,42)
@@ -455,7 +469,6 @@ class AppForm(QMainWindow):
                 a=1
             self.coloronly(index-1,r,b,g,a)            
 
-    
     def drawsection(self):
         xsec=self.textboxx.text()
         ysec=self.textboxy.text()
