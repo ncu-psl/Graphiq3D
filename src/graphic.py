@@ -112,7 +112,7 @@ class AppForm(QMainWindow,QWidget):
         self.axx.yaxis.set_major_locator(ymajorLocator)
         self.axx.xaxis.set_minor_locator(xminorLocator)
         self.axx.yaxis.set_minor_locator(yminorLocator)
-        self.axx.set_title('x-axis section',loc='center')
+        self.axx.set_title('Y-Z section',loc='center')
         #self.axx.set_aspect('equal')
         self.axy = self.fig.add_subplot(244)
         self.axy.set_xlim(0,41)
@@ -122,7 +122,7 @@ class AppForm(QMainWindow,QWidget):
         self.axy.yaxis.set_major_locator(ymajorLocator)
         self.axy.xaxis.set_minor_locator(xminorLocator)
         self.axy.yaxis.set_minor_locator(yminorLocator)
-        self.axy.set_title('y-axis section',loc='center')
+        self.axy.set_title('X-Z section',loc='center')
         #self.axy.set_aspect('equal')
         self.axz = self.fig.add_subplot(248)
         self.axz.set_xlim(0,41)
@@ -136,7 +136,7 @@ class AppForm(QMainWindow,QWidget):
         self.axz.yaxis.set_major_locator(ymajorLocator)
         self.axz.xaxis.set_minor_locator(xminorLocator)
         self.axz.yaxis.set_minor_locator(yminorLocator)
-        self.axz.set_title('z-axis section',loc='center')
+        self.axz.set_title('X-Y section',loc='center')
         #self.axz.set_aspect('equal')
         self.logo=self.fig.add_subplot(247)
         self.logo.set_aspect('equal')
@@ -145,6 +145,9 @@ class AppForm(QMainWindow,QWidget):
         img = mpimg.imread('color.png')
         imgplot = self.logo.imshow(img)
         self.logo.set_axis_off()
+        self.fig.canvas.mpl_connect('button_press_event',self.onpressx)
+        self.fig.canvas.mpl_connect('button_press_event',self.onpressy)
+        self.fig.canvas.mpl_connect('button_press_event',self.onpressz)
         
         
         font = QFont() 
@@ -165,10 +168,6 @@ class AppForm(QMainWindow,QWidget):
         self.comboboxcolor.setFont(font) 
         self.comboboxcolor.activated.connect(self.onecolor)
         
-        slider_labelx = QLabel('X:')
-        slider_labely = QLabel('Y:')
-        slider_labelz = QLabel('Z:')
-        
         
         self.returnbtn = QPushButton()
         self.returnbtn.setFont(font) 
@@ -181,7 +180,7 @@ class AppForm(QMainWindow,QWidget):
         self.i=0
         self.zoombutton.clicked.connect(self.count)
         self.sliderfig = QSlider(Qt.Horizontal)
-        self.sliderfig.setRange(1,100)
+        self.sliderfig.setRange(0,99)
         self.sliderfig.setStyleSheet("QSlider::handle:horizontal { border-radius:3px;border-image:url(rb.png);}")
         self.sliderfig.valueChanged.connect(self.zoomin)
         self.labezoomin = QLabel(self)
@@ -191,17 +190,17 @@ class AppForm(QMainWindow,QWidget):
         self.pixmapout = QPixmap('zi_opt.png')
         self.labezoomout.setPixmap(self.pixmapout)
         
-        textboxx_label = QLabel('  X-axis:')
+        textboxx_label = QLabel('  Y-Z section : ')
         self.textboxx = QLineEdit(self)
         self.textboxx.setText('0')
         textboxx_label.setFont(font) 
         self.textboxx.setStyleSheet("border: 1px solid gray;border-radius:4px;padding: 1px 18px 1px 3px;min-width: 3em;")
-        textboxy_label = QLabel('  Y-axis:')
+        textboxy_label = QLabel('  X-Z section : ')
         self.textboxy = QLineEdit(self)
         self.textboxy.setText('0')
         textboxy_label.setFont(font) 
         self.textboxy.setStyleSheet("border: 1px solid gray;border-radius:4px;padding: 1px 18px 1px 3px;min-width: 3em;")
-        textboxz_label = QLabel('  Z-axis:')
+        textboxz_label = QLabel('  X-Y section : ')
         self.textboxz = QLineEdit(self)
         self.textboxz.setText('0')
         textboxz_label.setFont(font) 
@@ -262,14 +261,51 @@ class AppForm(QMainWindow,QWidget):
         
     def zoomcenter(self):
         if self.i%2==1:
-            self.fig.canvas.mpl_connect('button_press_event',self.onpress)
+            #self.fig.canvas.mpl_connect('button_press_event',self.onpress)
             self.fig.canvas.mpl_connect('button_release_event',self.onrelease)
             self.pressevent=None
             
-    def onpress(self,event):
-        if event.inaxes !=self.zoomin:
+    def onpressx(self,event):
+        if event.inaxes !=self.axx:
             return
-        self.pressevent=event
+        self.pressevent=None
+        self.x=event.xdata
+        self.y=event.ydata
+        val=self.textboxx.text()
+        v=int(val)
+        x=int(self.x)
+        y=int(self.y)
+        print(v,x,y)
+        msg="You've clicked on a point : ( %s ,"%v + " %s ,"%x+" %s )\n"%y+"Value：%f "%self.data[v,x,y]
+        QMessageBox.information(self, "Click!",msg)
+        
+    def onpressy(self,event):
+        if event.inaxes !=self.axy:
+            return
+        self.pressevent=None
+        self.x=event.xdata
+        self.y=event.ydata
+        val=self.textboxy.text()
+        v=int(val)
+        x=int(self.x)
+        y=int(self.y)
+        print(x,v,y)
+        msg="You've clicked on a point : ( %s ,"%x + " %s ,"%v+" %s )\n"%y+"Value：%f "%self.data[x,v,y]
+        QMessageBox.information(self, "Click!",msg)
+        
+    def onpressz(self,event):
+        if event.inaxes !=self.axz:
+            return
+        self.pressevent=None
+        self.x=event.xdata
+        self.y=event.ydata
+        val=self.textboxz.text()
+        v=int(val)
+        x=int(self.x)
+        y=int(self.y)
+        print(x,y,v)
+        msg="You've clicked on a point : ( %s ,"%x + " %s ,"%y+" %s )\n"%v+"Value：%f "%self.data[x,y,v]
+        QMessageBox.information(self, "Click!",msg)
     
     def onrelease(self,event):
         self.pressevent=None
@@ -297,8 +333,8 @@ class AppForm(QMainWindow,QWidget):
     def zoomin(self):
         print(self.sliderfig.value())
         z=self.sliderfig.value()
-        self.zoomin.set_xlim(100,100)
-        self.zoomin.set_ylim(100,100)
+        self.zoomin.set_xlim(self.x-(self.x-150)*(100-z)/100,self.x+(1650-self.x)*(100-z)/100)
+        self.zoomin.set_ylim(self.y+(1750-self.y)*(100-z)/100,self.y-(self.y-180)*(100-z)/100)
         #self.zoomin.set_aspect('equal')
         print('aa')
     def save_plot(self):
@@ -307,6 +343,14 @@ class AppForm(QMainWindow,QWidget):
         path = QFileDialog.getSaveFileName(self, 
                         'Save file', '', 
                         file_choices)
+        extent = self.axes.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
+        self.fig.savefig('3Dmodel.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        extent = self.axx.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
+        self.fig.savefig('YZ_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        extent = self.axy.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
+        self.fig.savefig('XZ_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        extent = self.axz.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
+        self.fig.savefig('XY_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
         if path:
             self.canvas.print_figure(path[0], dpi=self.dpi)
             self.statusBar().showMessage('Saved to %s' % path, 2000)
@@ -335,22 +379,22 @@ class AppForm(QMainWindow,QWidget):
             while k<62:
                i=0
                while i<41:
-                   self.data[i,j,61-k]=self.test[x]
+                   self.data[i,j,k]=self.test[x]
                    
                    if self.test[x]<3:
-                       self.color[i,j,61-k]=0
+                       self.color[i,j,k]=0
                    elif self.test[x]>3 and self.test[x]<4:
-                       self.color[i,j,61-k]=1
+                       self.color[i,j,k]=1
                    elif self.test[x]>4 and self.test[x]<5:
-                       self.color[i,j,61-k]=2
+                       self.color[i,j,k]=2
                    elif self.test[x]>5 and self.test[x]<6:
-                       self.color[i,j,61-k]=3
+                       self.color[i,j,k]=3
                    elif self.test[x]>6 and self.test[x]<7:
-                       self.color[i,j,61-k]=4
+                       self.color[i,j,k]=4
                    elif self.test[x]>7 and self.test[x]<8:
-                       self.color[i,j,61-k]=5
+                       self.color[i,j,k]=5
                    elif self.test[x]>8:
-                       self.color[i,j,61-k]=6
+                       self.color[i,j,k]=6
                    x=x+1
                    i=i+1
                k=k+1
@@ -631,7 +675,7 @@ class AppForm(QMainWindow,QWidget):
         xsec=self.textboxx.text()
         ysec=self.textboxy.text()
         zsec=self.textboxz.text()
-        self.plot(xsec,ysec,zsec)
+        #self.plot(xsec,ysec,zsec)
         self.showsection(xsec,ysec,zsec)
     
     def plot(self,a,b,c):
@@ -736,7 +780,7 @@ class AppForm(QMainWindow,QWidget):
                 j=j+1
             i=i+1
         self.canvas.draw()
-
+        
 def main():
     app = QApplication(sys.argv)
     form = AppForm()
