@@ -344,13 +344,13 @@ class AppForm(QMainWindow,QWidget):
                         'Save file', '', 
                         file_choices)
         extent = self.axes.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
-        self.fig.savefig('3Dmodel.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        self.fig.savefig("3Dmodel.png", bbox_inches=extent.expanded(1.2, 1.2),dpi=200,transparent=True)
         extent = self.axx.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
-        self.fig.savefig('YZ_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        self.fig.savefig("YZ_section_%s.png"%self.textboxx.text(), bbox_inches=extent.expanded(1.2, 1.2),dpi=200,transparent=True)
         extent = self.axy.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
-        self.fig.savefig('XZ_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        self.fig.savefig("XZ_section_%s.png"%self.textboxy.text(), bbox_inches=extent.expanded(1.2, 1.2),dpi=200,transparent=True)
         extent = self.axz.get_window_extent().transformed(self.fig.dpi_scale_trans.inverted())
-        self.fig.savefig('XY_section.png', bbox_inches=extent.expanded(1.1, 1.2),dpi=200,transparent=True)
+        self.fig.savefig("XY_section_%s.png"%self.textboxz.text(), bbox_inches=extent.expanded(1.2, 1.2),dpi=200,transparent=True)
         if path:
             self.canvas.print_figure(path[0], dpi=self.dpi)
             self.statusBar().showMessage('Saved to %s' % path, 2000)
@@ -358,6 +358,7 @@ class AppForm(QMainWindow,QWidget):
     def openfile(self):
         filename,  _ = QFileDialog.getOpenFileName(self, 'Open file', './')
         file=open(filename)
+        print(filename)
         line = file.readline()
         self.test=[]
         while line:
